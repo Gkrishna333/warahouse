@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container">
+	<div class="card-header bg-primary  ">
+	         <h4 class="text-center text-white">  SHIPMENT TYPE DATA </h4>
+<span th:if="${msg}!=null"><b th:text="${msg}" ></b></span>
+	</div>
+	<div class="card-body">
+	<table class="table table-hover" >
+		<thead>
+			<tr class="bg-info text-white"> 
+					<th>ID</th>
+					<th>MODE</th>
+					<th>CODE</th>
+					<th>SHIP</th>
+					<th>GRADE</th>
+					<th>DESCRIPTION</th>
+					<th>OPERATION</th>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+		<tr th:each="ob:${list}">
+		<td th:text="${ob.shipId}"></td>
+		<td th:text="${ob.shipMode}"></td>
+		<td th:text="${ob.shipCode}"></td>
+			<td th:text="${ob.enableShip}"></td>
+		<td th:text="${ob.shipGrade}"></td>
+		<td th:text="${ob.shipDesc}"></td>
+		<td colspan="2">
+		  <a class="btn btn-danger" th:href="@{/st/delete(id=${ob.shipId})}"><b>DELETE</b></a>
+			<a class="btn btn-danger" th:href="@{/st/edit(id=${ob.shipId})}"><b>EDIT</b></a>
+		</td>
+		
+		</tr>
+		</tbody>
+	</table>
+	</div><!--  end of body-->
+	<div class="card-footer bg bg-primary">
+	
+	</div><!--  end of footer-->
+	</div><!-- end of container -->
+</body>
+
+</html>

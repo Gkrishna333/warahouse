@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-white text-center bg-primary">
+                <h2>Shipment Type Edit!</h2>
+            </div>
+            <div class="card-body">
+                <form  th:action="@{st/edit}" method="post" id="ShipmentTypeRegister" th:object="${shipmentType}" 
+                                             class="form-control"   >
+                 <div class="row">
+                        <div class="col-3"><label>Shipment code</label></div>
+                        <div class="col-4"><input type="text" th:field="${shipmentType.shipId}" readonly="readonly"></div>
+                        <div class="col-5">
+                  </div>
+                  </div>
+                    <!-- row 1 -->
+                    <div class="row">
+                        <div class="col-3"><label>Shipment Mode</label></div>
+                        <div class="col-4"><select class="form-control" th:field="*{shipMode}">
+                                <option value="">-select-</option>
+                                <option value="air">Air</option>
+                                <option value="ship">ship</option>
+                                <option value="truck">Truck</option>
+                                <option value="train">Train</option>
+                            </select></div>
+                        <div class="col-5"><span id="shipModeError"></span></div>
+                    </div> <!--  end of row 1 -->
+                    <!--//////////////////////////////////////////////////////////////////////////// -->
+                    <div class="row">
+                        <div class="col-3"><label>Shipment Code</label></div>
+                        <div class="col-4"><input type="text" th:field="${shipmentType.shipCode}" class="form-control"></div>
+                        <div class="col-5"><span id="shipCodeError"></span></div>
+                    </div> <!--  end of row 2 -->
+                    <!--//////////////////////   end of row 3  ///////////////////////////////////////// -->
+                    <div class="row">
+                        <div class="col-3"><label> Enable Shipment </label></div>
+                        <div class="col-4">
+                            <input type="radio" th:field="*{enableShip}" value="yes"> Yes &nbsp &nbsp &nbsp
+                            <input type="radio" th:field="*{enableShip}"  value="NO"> No
+                        </div>
+                        <div class="col-5"><span id="enableShipError"></span></div>
+                    </div> <!--  end of row 3 -->
+                    <!--//////////////////////   end of row 4  ///////////////////////////////////////// -->
+                    <div class="row">
+                        <div class="col-3"><label> Shipment Grade </label></div>
+                        <div class="col-4">
+                            <input type="radio" th:field="*{shipGrade}" value="A"> A &nbsp &nbsp &nbsp
+                            <input type="radio" th:field="*{shipGrade}"  value="B"> B &nbsp &nbsp &nbsp
+                            <input type="radio" th:field="*{shipGrade}" value="C"> C &nbsp &nbsp &nbsp
+                        </div>
+                        <div class="col-5"><span id="shipGradeError"></span></div>
+                    </div> <!--  end of row 4 -->
+                    <!--//////////////////////   end of row 5  ///////////////////////////////////////// -->
+                    <div class="row">
+                        <div class="col-3"><label> Description </label></div>
+                        <div class="col-4">
+                            <textarea th:field="*{shipDesc}"  class="form-control "></textarea>
+                        </div>
+                        <div class="col-5"><span id="shipDescError"></span></div>
+                    </div> <!--  end of row 5 -->
+                    <!-- ////////////////// submit button ////////////////////// -->
+                    <div class="row">
+                        <!-- <div class="col-3"></div> -->
+                        <div class="col-3"><input type="submit" value="Edit"
+                                class="btn btn-secondary btn-info "></div>
+                    </div>
+                </form>
+
+            </div> 
+<!--             end of body  -->
+            <div class="card-footer  bg bg-danger "  th:if="${msg!=null}">
+                <h4 th:text="${msg}"  class=" text-white text-center"></h4>
+            </div>
+        </div>
+        <!-- end of card div -->
+
+    </div>
+    <!-- end of container -->
+
+    <script>
+        $(document).ready(function () {
+            //by default hide Error section
+            $("#shipModeError").hide();
+            $("#shipCodeError").hide();
+            $("#enableShipError").hide();
+            $("#shipGradeError").hide();
+            $("#shipDescError").hide();
+
+            //create varible for error section
+            var shipModeError = false;
+            var shipCodeError = false;
+            var enableShipError = false;
+            var shipGradeError = false;
+            var shipDescError = false;
+
+            //create validate funtion
+            function shipMode_Error() {
+                var val = $("#shipMode").val();
+                console.log(val)
+                if (val == '') {
+                    $("#shipModeError").show();
+                    $("#shipModeError").html('*select any one <b>Mode </b>')
+                    $("#shipModeError").css('color', 'red');
+                    shipModeError = false;
+                } else {
+                    $("#shipModeError").hide();
+                    shipModeError = true;
+                }
+                return shipModeError;
+            }
+            function shipCode_Error() {
+                var val = $("#shipCode").val();
+                console.log(val)
+                if (val == '') {
+                    $("#shipCodeError").show()
+                    $("#shipCodeError").html('* enter <b>code</b>')
+                    $("#shipCodeError").css('color', 'red');
+                    shipCodeError = false;
+                } else {
+                    $("#shipCodeError").hide();
+                    shipCodeError = true;
+                }
+                return shipCodeError;
+
+            }
+            function enableShip_Error() {
+                var len = $("[name='enableShip']:checked").length;
+                console.log(len);
+                if (len == 0) {
+                    $("#enableShipError").show()
+                    $("#enableShipError").html('select any <b>Shipment</b>')
+                    $("#enableShipError").css('color', 'red')
+                    enableShipError = false;
+                } else {
+                    $("#enableShipError").hide()
+                    enableShipError = true;
+                }
+                return enableShipError;
+
+            }
+            function shipGrade_Error() {
+                var len = $("[name='shipGrade']:checked").length;
+                if (len == 0) {
+                    $("#shipGradeError").show();
+                    $("#shipGradeError").html('select any <b> Grade</b>')
+                    $("#shipGradeError").css('color', 'red');
+                    shipGradeError = false;
+                } else {
+                    $("#shipGradeError").hide();
+                    shipGradeError = true;
+                }
+              return  shipGradeError;
+            }
+            function shipDesc_Error() {
+                var val = $("#shipDesc").val();
+                if (val == '') {
+                    $("#shipDescError").show();
+                    $("#shipDescError").html('enter any <b> Description </b>')
+                    $("#shipDescError").css('color', 'red');
+                    shipDescError = false;
+                } else {
+                    $("#shipDescError").hide();
+                    shipDescError = true;
+                }
+                return shipDescError;
+            }
+
+            //create action event
+            $("#shipMode").change(function () {
+                shipMode_Error();
+            })
+            $("#shipCode").keyup(function () {
+                shipCode_Error();
+            })
+            $("#enableShip").change(function () {
+                enableShip_Error();
+            })
+            $("#shipGrade").change(function () {
+                shipGrade_Error();
+            })
+            $("#shipGrade").change(function () {
+                enableShip_Error();
+            })
+            $("#shipDesc").keyup(function () {
+                shipDesc_Error();
+            })
+
+
+
+            //onsubmit event
+            $("#ShipmentTypeRegister").submit(function () {
+                var enableShip = enableShip_Error();
+                var shipCode = shipCode_Error();
+                var shipMode = shipMode_Error();
+                var shipGrade = shipGrade_Error();
+                var shipDesc = shipDesc_Error();
+                      console.log(shipCode )
+               
+ console.log(shipCode)
+  console.log(shipMode)
+   console.log(shipGrade)
+  console.log(shipDesc);
+                
+                if (enableShip && shipCode && shipMode && shipGrade && shipDesc) {
+                    return true;
+                }
+                return false;
+            })
+
+        }) //end of ready method
+    </script>
+</body>
+
+</html>
